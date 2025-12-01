@@ -9,9 +9,18 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@pixi/react": "^8.0.4",
+    "fs-extra": "^11.3.2",
+    "lottie-web": "^5.13.0",
     "next": "16.0.5",
+    "path": "^0.12.7",
+    "pixi.js": "^8.14.3",
+    "puppeteer": "^24.31.0",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "spritesheet-templates": "^10.5.2",
+    "spritesmith": "^3.5.1",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -21,6 +30,9 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.5",
+    "lottie-node": "^2.0.0",
+    "sharp": "^0.34.5",
+    "spritesheet-js": "^1.2.8",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
