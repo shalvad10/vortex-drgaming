@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Overview
 
-## Getting Started
+This is a prototype of a spinning “vortex” cashout game.  
+The player places a bet, a spinning slot in the center reveals symbols, and matching rings around the vortex gradually fill to build a multiplier. The player can **cash out anytime**, but if a forbidden symbol appears, all progress is lost.
 
-First, run the development server:
+The project focuses on:
+- **Responsive and animated game UI using PixiJS.**
+- **Lottie-based 2D animated symbols.**
+- **Zustand-driven state for deterministic gameplay logic.**
+- **Modular, testable ring + progress architecture.**
+
+---
+
+## Installation & Running
 
 ```bash
+# Install dependencies
+npm install
+
+# Run development
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build production bundle
+npm run build
+
+# Optional: Preview build
+npm run preview
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Requirements
+- **Node.js 18+**
+- A modern browser with WebGL support (Chrome/Brave/Edge/Firefox)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Libraries Used
 
-## Learn More
+| Library | Purpose |
+|---------|---------|
+| **PixiJS** | Real-time 2D rendering of rings, vortex, and slot symbols |
+| **Zustand** | Predictable and lightweight game state store |
+| **Lottie-Web** | Vector animation playback for winning/losing symbols |
+| **React + Next.js** | UI layer and game container |
 
-To learn more about Next.js, take a look at the following resources:
+### Why these?
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Need | Choice | Reason |
+|------|--------|--------|
+| High-frequency animation | PixiJS | WebGL accelerated, highly performant |
+| Persistent but minimal game logic | Zustand | Small, no boilerplate, great for prototypes |
+| Playable symbol animations | Lottie | Lightweight and scalable vector effects |
+| Meta UI, screens, future expansion | React/Next | Perfect for overlays, menus, store, etc. |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Architecture Overview
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### **1. Game State (Zustand)**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Holds balance, current bet, ring progress, canCashOut flag.
+- Multiplier calculated as sum of filled segments across rings.
+- Runtime `runSpin()` function injected by Pixi layer to trigger spins.
+
+```ts
+runSpin: (bet) => Promise<void>
+```
+
+ **Pixi just renders. Zustand is the single source of truth.**
+
+---
+
+### **2. Vortex + Progress Rendering (PixiJS)**
+
+- Rings are generated from shared JSON config `RING_CONFIGS`.
+- Each ring has:
+  - Gradient fill texture
+  - Segment dividers
+  - Progress arc visualization
+  - Optional icon
+- Slot machine is masked inside the center circle.
+
+ **Progress UI updates only mirror Zustand state. Never compute logic in Pixi.**
+
+---
+
+### **3. Symbol Animation (Lottie)**
+
+- Each symbol has:
+  - A static texture (for slot spinning)
+  - An animation (when result is revealed)
+- Lottie is rendered off-screen, converted to canvas, and mapped to a Pixi texture.
+
+ Used only on result, not during spinning → performance win.
+
+---
+
+## Future Improvements (with extra 1–2 days)
+
+| Feature | Benefit |
+|---------|--------|
+| Symbol probability weighting | Makes the game fair & tunable |
+| Persistent economy + backend | Track live users, losses, wins |
+| FX shader (glow + blur) on progress arcs | More premium look |
+| Audio feedback for cashout & losses | Higher player excitement |
+| Multi-ring probability linking | Enables “rare jackpots” and risk tiers |
+| Mobile gesture support | Tap/drag/spin interactions |
+
+---
+
+## Notes
+
+- Prototype prioritizes **architecture over polish**, allowing for quick scaling.
+- All visual configurations are centralized in a single `ringConfig` file.
+- The central vortex is intentionally isolated from business logic, making it replaceable with any game mechanic later.
