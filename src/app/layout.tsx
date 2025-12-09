@@ -1,10 +1,4 @@
 import "./globals.css";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Vortex Game",
-  description: "Multiplier vortex crash-style game",
-};
 
 export default function RootLayout({
   children,
@@ -13,7 +7,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body style={{ backgroundColor: "#1f2128", margin: 0 }}>
+        {children}
+      </body>
     </html>
   );
 }

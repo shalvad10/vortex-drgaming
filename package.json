@@ -9,11 +9,15 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@pixi/graphics-extras": "^7.4.3",
     "@pixi/react": "^8.0.4",
     "fs-extra": "^11.3.2",
+    "gsap": "^3.13.0",
     "lottie-web": "^5.13.0",
+    "lottie-web-parser": "^2.1.0",
     "next": "16.0.5",
     "path": "^0.12.7",
+    "pixi-lottie": "^0.0.2",
     "pixi.js": "^8.14.3",
     "puppeteer": "^24.31.0",
     "react": "19.2.0",
